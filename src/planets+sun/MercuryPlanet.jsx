@@ -3,19 +3,19 @@ import { useFrame, useLoader } from "@react-three/fiber";
 import { TextureLoader } from "three";
 import { Sphere } from "@react-three/drei";
 
-const Mercury = () => {
+const Mercury = ({size, speed, distance}) => {
   const mercuryRef = useRef();
   const mercuryTexture = useLoader(TextureLoader, "/textureImages/mercury.png");
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
-    mercuryRef.current.position.x = Math.cos(t * 1.5) * 5; // Orbit around Sun
-    mercuryRef.current.position.z = Math.sin(t * 1.5) * 5;
-    mercuryRef.current.rotation.y += 0.01; // Self-rotation
+    const x = Math.cos(t * speed) * distance;
+    const z = Math.sin(t * speed) * distance;
+    mercuryRef.current.position.set(x, 0, z);
+    mercuryRef.current.rotation.y += 0.01;
   });
-
   return (
-    <Sphere ref={mercuryRef} args={[0.4, 32, 32]}>
+    <Sphere ref={mercuryRef} args={[size, 32, 32]}>
       <meshStandardMaterial map={mercuryTexture} />
     </Sphere>
   );

@@ -3,21 +3,20 @@ import { useFrame, useLoader } from "@react-three/fiber";
 import { TextureLoader } from "three";
 import { Sphere } from "@react-three/drei";
 
-const Uranus = () => {
+const Uranus = ({size, speed, distance}) => {
   const uranusRef = useRef();
   const uranusTexture = useLoader(TextureLoader, "/textureImages/uranus.png");
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
-    const x = Math.cos(t * 0.15) * 45; // Uranus' orbit distance
-    const z = Math.sin(t * 0.15) * 45;
-
+    const x = Math.cos(t * speed) * distance;
+    const z = Math.sin(t * speed) * distance;
     uranusRef.current.position.set(x, 0, z);
-    uranusRef.current.rotation.y += 0.01; // Slow rotation
+    uranusRef.current.rotation.y += 0.01;
   });
 
   return (
-    <Sphere ref={uranusRef} args={[1.8, 64, 64]}>
+    <Sphere ref={uranusRef} args={[size, 64, 64]}>
       <meshStandardMaterial map={uranusTexture} />
     </Sphere>
   );
